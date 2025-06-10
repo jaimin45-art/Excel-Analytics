@@ -1,30 +1,43 @@
-import { Routes, Route, redirect, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
-import { Toaster } from "@/components/ui/toaster";
 import { VerificationEmailPage } from "./pages/VerificationEmailPage";
-import { useAuthStore } from "./store/authStore";
-import { useEffect } from "react";
-import DashboardPage from "./pages/DashboardPage";
-import { Button } from "./components/ui/button";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
+import DashboardPage from "./pages/DashboardPage";
+import UploadExcel from "./pages/UploadExcel";
+import AdminPanel from "./pages/AdminPanel";
 
+import { Toaster } from "@/components/ui/toaster";
+import { Button } from "./components/ui/button";
+import { useAuthStore } from "./store/authStore";
+import { useEffect } from "react";
+
+// Protect normal user routes
 const ProtectRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
-  if (!isAuthenticated && !user) {
-    return <Navigate to="/login" replace />;
-  }
-
+  if (!isAuthenticated || !user) return <Navigate to="/login" replace />;
   return children;
 };
 
+// Redirect logged-in users from login/signup pages
 const AuthenticatedUserRoute = ({ children }) => {
   const { isAuthenticated, user } = useAuthStore();
   if (isAuthenticated && user) {
-    return <Navigate to="/dashboard" replace />;
+    if (!user.isVerified) return <Navigate to="/verify-email" replace />;
+    return user.role === "admin"
+      ? <Navigate to="/admin" replace />
+      : <Navigate to="/dashboard" replace />;
   }
+  return children;
+};
 
+// Protect admin-only routes
+const AdminRoute = ({ children }) => {
+  const { isAuthenticated, user } = useAuthStore();
+  if (!isAuthenticated || !user || user.role !== "admin") {
+    return <Navigate to="/login" replace />;
+  }
   return children;
 };
 
@@ -34,20 +47,23 @@ function App() {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-  console.log(user);
 
-  if (isCheckingAuth) {
-    return <div>Loading...</div>;
-  }
+  if (isCheckingAuth) return <div>Loading...</div>;
 
   const handleLogout = async () => {
     await logout();
   };
+
   return (
     <div>
-      {user && <Button onClick={handleLogout}>Logout</Button>}
+      {user && (
+        <Button onClick={handleLogout} className="absolute top-4 right-4">
+          Logout
+        </Button>
+      )}
+
       <Routes>
-        
+        {/* Public Routes */}
         <Route
           path="/"
           element={
@@ -65,15 +81,10 @@ function App() {
           }
         />
         <Route path="/verify-email" element={<VerificationEmailPage />} />
-        <Route path="/reset-password/:token" element={<ResetPasswordPage />} /> 
-         <Route
-          path="/forgot-password"
-          element={
-            <AuthenticatedUserRoute>
-              <ForgotPasswordPage />
-            </AuthenticatedUserRoute>
-          }
-        />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+
+        {/* Protected User Routes */}
         <Route
           path="/dashboard"
           element={
@@ -82,7 +93,26 @@ function App() {
             </ProtectRoute>
           }
         />
+        <Route
+          path="/upload"
+          element={
+            <ProtectRoute>
+              <UploadExcel />
+            </ProtectRoute>
+          }
+        />
+
+        {/* Admin Only Route */}
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminPanel />
+            </AdminRoute>
+          }
+        />
       </Routes>
+
       <Toaster />
     </div>
   );

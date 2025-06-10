@@ -8,9 +8,16 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.env
+
+# Node modules (ignore both frontend and backend)
+node_modules/
+frontend/node_modules/
+backend/node_modules/
 dist
 dist-ssr
 *.local
+
 
 # Editor directories and files
 .vscode/*

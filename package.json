@@ -19,8 +19,10 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
+    "multer": "^2.0.1",
     "nodemailer": "^7.0.3",
-    "resend": "^4.5.1"
+    "resend": "^4.5.1",
+    "xlsx-populate": "^1.21.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
