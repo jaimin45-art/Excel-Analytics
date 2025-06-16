@@ -62,3 +62,22 @@
     @apply bg-background text-foreground;
   }
 }
+
+:root {
+  --bg-color: #e0f0ff;
+  --text-color: #1a1a1a;
+  --card-color: #ffffff;
+}
+
+[data-theme='dark'] {
+  --bg-color: #121212;
+  --text-color: #f1f1f1;
+  --card-color: #1e1e1e;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+}

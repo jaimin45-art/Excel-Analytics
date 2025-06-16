@@ -1,0 +1,69 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const cartIcon = document.querySelector(".cart-icon");
+    const cartModal = document.querySelector(".cart-modal");
+    const cartItemsContainer = document.querySelector(".cart-items");
+    const cartTotal = document.querySelector(".cart-total");
+    const closeCart = document.querySelector(".close-cart");
+    const addToCartButtons = document.querySelectorAll(".add-to-cart");
+
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Function to update cart UI
+    function updateCartUI() {
+        cartItemsContainer.innerHTML = "";
+        let total = 0;
+
+        cart.forEach((item, index) => {
+            total += parseFloat(item.price.replace("Rs", ""));
+
+            cartItemsContainer.innerHTML += `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.title}" class="card">
+                    <div>
+                        <p>${item.title}</p>
+                        <p>${item.price}</p>
+                        <button class="remove-item" data-index="${index}">Remove</button>
+                    </div>
+                </div>
+            `;
+        });
+
+        cartTotal.innerText = `Total: $${total.toFixed(2)}`;
+        localStorage.setItem("cart", JSON.stringify(cart));
+
+        // Remove items from cart
+        document.querySelectorAll(".remove-item").forEach((button) => {
+            button.addEventListener("click", function () {
+                let index = this.getAttribute("data-index");
+                cart.splice(index, 1);
+                updateCartUI();
+            });
+        });
+    }
+
+    // Add to cart function
+    addToCartButtons.forEach((button) => {
+        button.addEventListener("click", function () {
+            let product = this.closest(".product-card");
+            let title = product.querySelector(".title").innerText;
+            let price = product.querySelector(".amount").innerText;
+            let image = product.querySelector("img").src;
+
+            cart.push({ title, price, image });
+            updateCartUI();
+        });
+    });
+
+    // Show cart when clicking cart icon
+    cartIcon.addEventListener("click", function () {
+        cartModal.classList.add("open");
+    });
+
+    // Close cart modal
+    closeCart.addEventListener("click", function () {
+        cartModal.classList.remove("open");
+    });
+
+    // Load cart UI on page load
+    updateCartUI();
+});

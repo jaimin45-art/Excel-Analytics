@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import Hero from "./pages/hero"; 
 import SignUpPage from "./pages/SignUpPage";
 import LoginPage from "./pages/LoginPage";
 import { VerificationEmailPage } from "./pages/VerificationEmailPage";
@@ -63,9 +64,12 @@ function App() {
       )}
 
       <Routes>
-        {/* Public Routes */}
+        
+        <Route path="/" element={<Hero />} />
+
+        
         <Route
-          path="/"
+          path="/signup"
           element={
             <AuthenticatedUserRoute>
               <SignUpPage />
@@ -84,7 +88,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
 
-        {/* Protected User Routes */}
+        
         <Route
           path="/dashboard"
           element={
@@ -102,7 +106,7 @@ function App() {
           }
         />
 
-        {/* Admin Only Route */}
+        
         <Route
           path="/admin"
           element={
