@@ -25,6 +25,7 @@
     "xlsx-populate": "^1.21.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^4.6.0",
     "nodemon": "^3.1.10"
   }
 }

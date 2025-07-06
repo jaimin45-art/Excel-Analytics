@@ -1,38 +1,51 @@
-import { Link } from "react-router-dom";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-100 to-blue-200 flex items-center justify-center px-4">
-      <div className="bg-white shadow-xl rounded-2xl max-w-xl w-full p-10 text-center">
-        <h1 className="text-4xl font-extrabold text-gray-800 mb-3">Excel Analytics</h1>
-        <p className="text-gray-600 text-lg mb-6">Upload. Analyze. Improve.</p>
+    <section className="min-h-screen flex items-center justify-center bg-blue-100 p-6">
+      <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+        
+        <div className="text-center md:text-left space-y-6">
+          <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800">
+            Welcome to <span className="text-blue-700">Excel Analytics</span>
+          </h1>
 
-        <ul className="text-left mb-6 space-y-3 text-gray-700">
-          <li className="flex items-center gap-2">
-            📂 <span>Upload your Excel sheet</span>
-          </li>
-          <li className="flex items-center gap-2">
-            📊 <span>Get automatic analysis</span>
-          </li>
-          <li className="flex items-center gap-2">
-            🚀 <span>Improve performance with insights</span>
-          </li>
-        </ul>
+          <p className="text-lg md:text-xl text-gray-700">
+            Unlock insights. Analyze smarter. Make better decisions with your data.<br />
+            Dive into the world of data with confidence. Whether you're a business owner,
+            analyst, student, or just someone who loves making informed decisions — this is
+            the platform where numbers come alive. Transform dull spreadsheets into powerful
+            insights, visualize trends, and make smarter, faster, and better choices with your data.
+          </p>
 
-        <div className="flex justify-center gap-4">
-          <Link to="/login">
-            <button className="px-5 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition">
+          <div className="space-x-4">
+            <button
+              onClick={() => navigate("/login")}
+              className="bg-blue-700 text-white px-6 py-3 rounded-xl hover:bg-blue-800 transition duration-300"
+            >
               Login
             </button>
-          </Link>
-          <Link to="/signup">
-            <button className="px-5 py-2 bg-white text-black border border-gray-300 rounded-lg hover:bg-gray-100 transition">
+            <button
+              onClick={() => navigate("/signup")}
+              className="border border-blue-700 text-blue-700 px-6 py-3 rounded-xl hover:bg-blue-100 transition duration-300"
+            >
               Sign Up
             </button>
-          </Link>
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <img
+            src="/image excel.jpeg"
+            alt="Excel Analysis"
+            className="w-full max-w-md rounded-lg shadow-lg"
+          />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
